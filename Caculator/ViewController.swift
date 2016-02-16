@@ -44,7 +44,6 @@ class ViewController: UIViewController {
                 userIsInTheMiddleOfTypingANumber = true
             }
         }
-        
     }
     
     @IBAction func enter() {
@@ -59,7 +58,7 @@ class ViewController: UIViewController {
         } else {
             displayValue = 0
         }
-        
+
     }
     
     var displayValue: Double {
@@ -76,8 +75,7 @@ class ViewController: UIViewController {
         displayValue = 0
         history.text = nil
         brain.clear()
-        history.text = "Hist: "
-        
+        history.text = "History: "
     }
 
     @IBAction func operate(sender: UIButton) {
@@ -96,7 +94,6 @@ class ViewController: UIViewController {
                 displayValue = 0
             }
         }
-        
     }
 }
 

@@ -80,9 +80,7 @@ class CalculatorBrain {
                         return (operation(operand1,operand2), op2Evaluation.remainingOps)
                     }
                 }
-            
             }
-            
         }
         
         return (nil,ops)
@@ -115,13 +113,4 @@ class CalculatorBrain {
     func clear() {
         opStack = [Op]()
     }
-    
 }
-
-
-
-
-
-
-
-
