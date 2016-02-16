@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class CalculatorBrain {
     
     private enum Op: CustomStringConvertible {
@@ -89,9 +88,7 @@ class CalculatorBrain {
     
     func evaluate() -> Double? {
         let (result, _) = evaluate(opStack)
-        //print("\(opStack) = \(result) with \(remainder) left over ")
         return result
-        
     }
     
     
