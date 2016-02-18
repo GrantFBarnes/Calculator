@@ -71,6 +71,9 @@ class ViewController: UIViewController {
     var displayValue: Double? {
         get {
             if let d = display.text {
+                if d == "ERROR" {
+                    return nil
+                }
                 return NSNumberFormatter().numberFromString(d)!.doubleValue
             } else {
                 return nil
