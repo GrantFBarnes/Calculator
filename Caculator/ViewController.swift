@@ -47,26 +47,41 @@ class ViewController: UIViewController {
     }
     
     @IBAction func enter() {
-        if history.text!.rangeOfString(".") != nil {
-            history.text = history.text! + ", \(displayValue)"
-        } else {
-            history.text = history.text! + "\(displayValue)"
-        }
+
         userIsInTheMiddleOfTypingANumber = false
-        if let result = brain.pushOperand(displayValue) {
-            displayValue = result
+        if let d = displayValue {
+            
+            if history.text!.rangeOfString(".") != nil {
+                history.text = history.text! + ", \(d)"
+            } else {
+                history.text = history.text! + "\(d)"
+            }
+            
+            if let result = brain.pushOperand(d) {
+                displayValue = result
+            } else {
+                displayValue = 0
+            }
         } else {
-            displayValue = 0
+            displayValue = nil
         }
 
     }
     
-    var displayValue: Double {
+    var displayValue: Double? {
         get {
-            return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+            if let d = display.text {
+                return NSNumberFormatter().numberFromString(d)!.doubleValue
+            } else {
+                return nil
+            }
         }
         set {
-            display.text = "\(newValue)"
+            if let nv = newValue {
+                display.text = "\(nv)"
+            } else {
+                display.text = "ERROR"
+            }
             userIsInTheMiddleOfTypingANumber = false
         }
     }
@@ -83,15 +98,16 @@ class ViewController: UIViewController {
             enter()
         }
         if let operation = sender.currentTitle {
-            if history.text!.rangeOfString(".") != nil {
-                history.text = history.text! + ", " + operation
-            } else {
-                history.text = history.text! + operation
-            }
+
             if let result = brain.performOperation(operation) {
                 displayValue = result
+                if history.text!.rangeOfString(".") != nil {
+                    history.text = history.text! + ", " + operation
+                } else {
+                    history.text = history.text! + operation
+                }
             } else {
-                displayValue = 0
+                displayValue = nil
             }
         }
     }

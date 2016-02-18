@@ -28,7 +28,7 @@
                                 <rect key="frame" x="20" y="75" width="560" height="21"/>
                                 <color key="backgroundColor" red="0.80135998629184868" green="0.78213542484762177" blue="0.84282967931937169" alpha="0.096215647163120574" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9cW-K5-Fei">
