@@ -30,9 +30,7 @@ class CalculatorBrain {
                     return symbol
                 case .Variable(let variable):
                     return variable
-                    
                 }
-            
             }
         }
     }
@@ -48,7 +46,6 @@ class CalculatorBrain {
     var program: PropertyList { // guaranteed to be a PropertyList
         get {
             return opStack.map{$0.description}
-            
         }
         set {
             if let opSymbols = newValue as? Array<String> {
@@ -60,7 +57,6 @@ class CalculatorBrain {
                         newOpStack.append(.Operand(operand))
                     }
                 }
-                
                 opStack = newOpStack
             }
         }
@@ -199,12 +195,9 @@ class CalculatorBrain {
                 
             case .Constant(_, let operand):
                 return (operand,remainingOps)
-                
             }
         }
-        
         return (nil,ops)
-        
     }
     
     func evaluate() -> Double? {
@@ -212,15 +205,12 @@ class CalculatorBrain {
         return result
     }
     
-    
     func pushOperand(operand: Double) -> Double? {
-        
         opStack.append(Op.Operand((operand)))
         return evaluate()
     }
     
     func performOperation(symbol: String) -> Double? {
-        
         if let operation = knownOps[symbol] {
             opStack.append(operation)
         }
@@ -231,7 +221,6 @@ class CalculatorBrain {
         variableValues["M"] = NSNumberFormatter().numberFromString(symbol)!.doubleValue
         opStack.append(Op.Variable("M"))
         return evaluate()
-        
     }
     
     func getVariableVal() -> Double? {
@@ -247,5 +236,4 @@ class CalculatorBrain {
         opStack = [Op]()
         variableValues = Dictionary<String,Double>()
     }
-    
 }

@@ -71,7 +71,6 @@ class ViewController: UIViewController {
         } else {
             displayValue = nil
         }
-
     }
     
     var displayValue: Double? {
@@ -101,9 +100,7 @@ class ViewController: UIViewController {
         history.text = " "
     }
 
-
     @IBAction func setVariable() {
-        
         if let d = display.text {
             if d != "ERROR" {
                 brain.setVariableVal(NSNumberFormatter().numberFromString(d)!.doubleValue)
@@ -129,7 +126,6 @@ class ViewController: UIViewController {
             history.text = brain.description
         }
     }
-
     
     @IBAction func operate(sender: UIButton) {
         if userIsInTheMiddleOfTypingANumber {
@@ -164,7 +160,6 @@ class ViewController: UIViewController {
                 } else {
                     history.text = brain.description
                 }
-                
                 displayValue = nil
             }
         }
@@ -202,5 +197,3 @@ class ViewController: UIViewController {
         return (String(result.characters.dropLast()), prev.count)
     }
 }
-
-
