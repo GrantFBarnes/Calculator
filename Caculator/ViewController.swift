@@ -22,7 +22,12 @@ class ViewController: UIViewController {
         
         if userIsInTheMiddleOfTypingANumber {
             if digit == "⬅︎" {
-                display.text = String(display.text!.characters.dropLast())
+                let temp = String(display.text!.characters.dropLast())
+                if temp == "" {
+                    displayValue = 0
+                } else {
+                    display.text = temp
+                }
                 
             } else if digit == "±" {
                 if display.text!.rangeOfString("-") == nil  {
@@ -51,17 +56,18 @@ class ViewController: UIViewController {
         userIsInTheMiddleOfTypingANumber = false
         if let d = displayValue {
             
-            if history.text!.rangeOfString(".") != nil {
-                history.text = history.text! + ", \(d)"
-            } else {
-                history.text = history.text! + "\(d)"
-            }
-            
             if let result = brain.pushOperand(d) {
                 displayValue = result
             } else {
                 displayValue = 0
             }
+            
+            if history.text != " " {
+                history.text = String(history.text!.characters.dropLast()) + ", " + brain.description
+            } else {
+                history.text = brain.description
+            }
+            
         } else {
             displayValue = nil
         }
@@ -91,11 +97,40 @@ class ViewController: UIViewController {
     
     @IBAction func clear() {
         displayValue = 0
-        history.text = nil
         brain.clear()
-        history.text = "History: "
+        history.text = " "
     }
 
+
+    @IBAction func setVariable() {
+        
+        if let d = display.text {
+            if d != "ERROR" {
+                brain.setVariableVal(NSNumberFormatter().numberFromString(d)!.doubleValue)
+                userIsInTheMiddleOfTypingANumber = false
+                if let v = brain.evaluate() {
+                    displayValue = v
+                } else {
+                    displayValue = 0
+                }
+            }
+        }
+    }
+    
+    @IBAction func getVariable() {
+        if userIsInTheMiddleOfTypingANumber {
+            enter()
+        }
+        let val = brain.getVariableVal()
+        displayValue = val
+        if history.text != " " {
+            history.text = String(history.text!.characters.dropLast()) + ", " + brain.description
+        } else {
+            history.text = brain.description
+        }
+    }
+
+    
     @IBAction func operate(sender: UIButton) {
         if userIsInTheMiddleOfTypingANumber {
             enter()
@@ -104,15 +139,67 @@ class ViewController: UIViewController {
 
             if let result = brain.performOperation(operation) {
                 displayValue = result
-                if history.text!.rangeOfString(".") != nil {
-                    history.text = history.text! + ", " + operation
+                
+                if history.text != " " {
+                    let (new,len) = splitHistory(operation)
+                    if len >= 1 {
+                        history.text = new + ", " + brain.description
+                    } else {
+                        history.text =  brain.description
+                    }
+                    
                 } else {
-                    history.text = history.text! + operation
+                    history.text = brain.description
                 }
+
             } else {
+
+                if history.text!.containsString("M") {
+                    let (new,len) = splitHistory(operation)
+                    if len >= 1 {
+                        history.text = new + ", " + brain.description
+                    } else {
+                        history.text =  brain.description
+                    }
+                } else {
+                    history.text = brain.description
+                }
+                
                 displayValue = nil
             }
         }
+    }
+    
+    func splitHistory(op: String)-> (String, Int) {
+        let consts = ["π","e"]
+        let unary = ["√","cos","sin","%","^2","±","1/x","^3"]
+        var prev = history.text!.componentsSeparatedByString(", ")
+        
+        if unary.contains(op) {
+            if prev.count >= 1 {
+                prev.removeLast()
+            }
+        } else if consts.contains(op) {
+            var new = prev[prev.count-1]
+            new = String(new.characters.dropLast())
+            new = String(new.characters.dropLast())
+            prev[prev.count-1] = new
+        } else {
+            if prev.count >= 2 {
+                prev.removeLast()
+                prev.removeLast()
+            } else if prev.count >= 1{
+                prev.removeLast()
+            }
+        }
+        
+        var result = ""
+        for c in prev {
+            result = result + c + ", "
+        }
+        
+        result = String(result.characters.dropLast())
+        return (String(result.characters.dropLast()), prev.count)
     }
 }
 
