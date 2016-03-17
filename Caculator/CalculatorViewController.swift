@@ -8,10 +8,42 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class CalculatorViewController: UIViewController {
 
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var history: UILabel!
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        var destination = segue.destinationViewController as UIViewController
+        
+        if let navCon = destination as? UINavigationController {
+            destination = navCon.visibleViewController!
+        }
+        
+        if let gvc = destination as? GraphViewController {
+            if let identifier = segue.identifier {
+                let hist = history.text!.componentsSeparatedByString(", ")
+                let c = hist.count
+                var e = hist[c-1]
+                if e == " " {
+                    e = "Graph"
+                }
+                
+                switch identifier {
+                case "graph":
+                    gvc.equation = e
+                    gvc.brain = brain
+                    
+                default:
+                    gvc.equation = "Graph"
+                    gvc.brain = brain
+                }
+            }
+        }
+    }
+    
     
     var userIsInTheMiddleOfTypingANumber = false
     

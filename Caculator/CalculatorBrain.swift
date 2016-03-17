@@ -159,6 +159,42 @@ class CalculatorBrain {
 
     }
     
+    private func evaluateForGraph(ops: [Op],x:Double) -> (result: Double?, remainingOps: [Op]) {
+        
+        if !ops.isEmpty {
+            var remainingOps = ops
+            let op = remainingOps.removeLast()
+            
+            switch op {
+            case .Operand(let operand):
+                return (operand, remainingOps)
+                
+            case .UnaryOperation(_, let operation):
+                
+                let operandEvaluation = evaluateForGraph(remainingOps,x:x)
+                if let operand = operandEvaluation.result {
+                    return (operation(operand), operandEvaluation.remainingOps)
+                }
+                
+                
+            case .BinaryOperation(_, let operation):
+                let op1Evaluation = evaluateForGraph(remainingOps,x:x)
+                if let operand1 = op1Evaluation.result {
+                    let op2Evaluation = evaluateForGraph(op1Evaluation.remainingOps,x:x)
+                    if let operand2 = op2Evaluation.result {
+                        return (operation(operand1,operand2), op2Evaluation.remainingOps)
+                    }
+                }
+            case .Variable(_):
+                return (x,remainingOps)
+                
+            case .Constant(_, let operand):
+                return (operand,remainingOps)
+            }
+        }
+        return (nil,ops)
+    }
+    
     
     private func evaluate(ops: [Op]) -> (result: Double?, remainingOps: [Op]) {
         
@@ -205,6 +241,11 @@ class CalculatorBrain {
         return result
     }
     
+    func evaluateForGraph(x:Double) -> Double? {
+        let (result, _) = evaluateForGraph(opStack,x:x)
+        return result
+    }
+    
     func pushOperand(operand: Double) -> Double? {
         opStack.append(Op.Operand((operand)))
         return evaluate()
@@ -235,5 +276,13 @@ class CalculatorBrain {
     func clear() {
         opStack = [Op]()
         variableValues = Dictionary<String,Double>()
+    }
+    
+    func getStack() -> [String] {
+        var result = [String]()
+        for x in opStack {
+            result.append("\(x)")
+        }
+        return result
     }
 }
